@@ -13,7 +13,7 @@ export default class WebGLView {
 
         this.initScene();
         this.initParticles();
-        this.show(0);
+        this.show(3);
     }
 
     initScene() {

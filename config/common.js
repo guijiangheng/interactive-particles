@@ -10,6 +10,10 @@ module.exports = {
             {
                 test: /\.(png|jpg)$/,
                 use: 'file-loader'
+            },
+            {
+                test: /\.(glsl|vert|frag)$/,
+                use: ['glslify-import-loader', 'raw-loader', 'glslify-loader']
             }
         ]
     },
