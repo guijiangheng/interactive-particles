@@ -26,16 +26,19 @@ export default class Particles {
             this.width = texture.image.width;
             this.height = texture.image.height;
 
+            this.initTouchTexture();
             this.initParticles();
             this.initHitPlane();
-            this.initTouchTexture();
             this.resize();
             this.show();
         });
     }
 
-    update() {
+    update(delta) {
         this.touchTexture.update();
+        if (this.particles) {
+            this.particles.material.uniforms.uTime.value += delta;
+        }
     }
 
     show() {
@@ -72,12 +75,14 @@ export default class Particles {
 
         const indices = new Uint16Array(numPoints);
         const offsets = new Float32Array(numPoints * 2);
+        const angles = new Float32Array(numPoints);
 
         for (let i = 0, j = 0; i < numPixels; ++i) {
             if (y(rgbas, i) > threshold) {
                 indices[j] = i;
                 offsets[j * 2 + 0] = i % this.width;
                 offsets[j * 2 + 1] = Math.floor(i / this.width);
+                angles[j] = Math.random() * Math.PI * 2;
                 ++j;
             }
         }
@@ -101,14 +106,17 @@ export default class Particles {
         geometry.setIndex(new THREE.BufferAttribute(new Uint16Array([ 0, 2, 1, 2, 3, 1 ]), 1));
         geometry.addAttribute('pindex', new THREE.InstancedBufferAttribute(indices, 1, false));
         geometry.addAttribute('offset', new THREE.InstancedBufferAttribute(offsets, 2, false));
+        geometry.addAttribute('angle', new THREE.InstancedBufferAttribute(angles, 1, false));
 
         const uniforms = {
+            uTime: { value: 0.0 },
+            uSize: { value: 1.2 },
+            uDepth: { value: 2.0 },
+            uRandom: { value: 1.0 },
             uTexture: { value: this.texture },
+            uTouch: { value: this.touchTexture.texture },
             uTextureSize: { value: new THREE.Vector2(this.width, this.height) }
         };
-
-        const source = require('../shaders/particles.vert');
-        console.log(source);
 
         const material = new THREE.RawShaderMaterial({
             uniforms,
@@ -124,7 +132,7 @@ export default class Particles {
     
     initHitPlane() {
         const geometry = new THREE.PlaneGeometry(this.width, this.height, 1, 1);
-        const material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true, depthTest: false });
+        const material = new THREE.MeshBasicMaterial({ visible: false, color: 0x0000ff, wireframe: true, depthTest: false });
         this.hitPlane = new THREE.Mesh(geometry, material);
         this.container.add(this.hitPlane);
     }
@@ -147,6 +155,7 @@ export default class Particles {
 
     onInteractiveMove(e) {
         this.touchTexture.addTouch(e.data.uv);
+        console.log(e.data.uv);
     }
     
     destroy() {

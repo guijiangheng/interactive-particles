@@ -13,10 +13,11 @@ export default class WebGLView {
 
         this.initScene();
         this.initParticles();
-        this.show(3);
+        this.show(4);
     }
 
     initScene() {
+        this.clock = new THREE.Clock(true);
         this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.camera.position.z = 300;
         this.scene = new THREE.Scene();
@@ -36,7 +37,7 @@ export default class WebGLView {
     }
 
     update() {
-        this.particles.update();
+        this.particles.update(this.clock.getDelta());
         this.renderer.render(this.scene, this.camera);
     }
 
