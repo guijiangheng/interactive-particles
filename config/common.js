@@ -8,16 +8,14 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.(png|jpg)$/,
-        use: 'file-loader',
-      },
-      {
         test: /\.(glsl|vert|frag)$/,
         use: ['glslify-import-loader', 'raw-loader', 'glslify-loader'],
       },
     ],
   },
   plugins: [
-    new HtmlWebpackPlugin(),
-  ],
+    new HtmlWebpackPlugin({
+      title: 'Interactive Particles',
+    }),
+  ]
 };

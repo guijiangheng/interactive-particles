@@ -1,7 +1,6 @@
 const merge = require('webpack-merge');
-const commonConfig = require('./common');
 
-module.exports = merge(commonConfig, {
+module.exports = merge(require('./common'), {
   module: {
     rules: [
       {
@@ -9,6 +8,10 @@ module.exports = merge(commonConfig, {
         exclude: /node_modules/,
         enforce: 'pre',
         loader: 'eslint-loader',
+      },
+      {
+        test: /\.(png|jpg)$/,
+        use: 'file-loader',
       },
     ],
   },
