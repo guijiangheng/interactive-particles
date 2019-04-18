@@ -11,6 +11,9 @@
   "license": "ISC",
   "devDependencies": {
     "css-loader": "^2.1.1",
+    "eslint": "^5.16.0",
+    "eslint-config-google": "^0.12.0",
+    "eslint-loader": "^2.1.2",
     "file-loader": "^3.0.1",
     "glslify-import-loader": "^0.1.2",
     "glslify-loader": "^2.0.0",
@@ -26,6 +29,7 @@
     "@brunoimbrizi/controlkit": "^0.1.96",
     "browser-detect": "^0.2.28",
     "glsl-noise": "0.0.0",
+    "gsap": "^2.1.2",
     "three": "^0.103.0"
   }
 }
